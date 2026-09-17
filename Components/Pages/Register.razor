@@ -1,0 +1,88 @@
+@page "/register"
+@inject NavigationManager Nav
+
+<PageTitle>Register</PageTitle>
+
+<div class="login-page">
+    <div class="login-left">
+        <div class="login-center">
+            <div class="brand">
+                <h1 class="logo">ROOTED</h1>
+                <p class="tagline">Personal Goal Reminder</p>
+            </div>
+
+            <div class="login-form-wrapper">
+                <h2 class="form-title">Register</h2>
+
+                <EditForm Model="registerModel" OnValidSubmit="HandleRegister" FormName="RegisterForm">
+                    <DataAnnotationsValidator />
+
+                    <div class="form-group">
+                        <InputText class="form-control" placeholder="Username" @bind-Value="registerModel.Username" />
+                    </div>
+
+                    <div class="form-group">
+                        <InputText class="form-control" placeholder="Email" @bind-Value="registerModel.Email" />
+                    </div>
+
+                    <div class="form-group">
+                        <InputText type="password" class="form-control" placeholder="Password" @bind-Value="registerModel.Password" />
+                    </div>
+
+                    <div class="form-group">
+                        <InputText type="password" class="form-control" placeholder="Confirm Password" @bind-Value="registerModel.ConfirmPassword" />
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <p class="error-text">@errorMessage</p>
+                    }
+
+                    <button type="submit" class="btn-login">Register</button>
+                </EditForm>
+
+                <p class="switch-link">
+                    Already have an account? <a href="/">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-right">
+        <!-- Fern / leaf illustration goes here -->
+    </div>
+</div>
+
+@code {
+    private RegisterModel registerModel = new();
+    private string? errorMessage;
+
+    private async Task HandleRegister()
+    {
+        if (registerModel.Password != registerModel.ConfirmPassword)
+        {
+            errorMessage = "Passwords do not match.";
+            return;
+        }
+
+        Nav.NavigateTo("/");
+        await Task.CompletedTask;
+    }
+
+    public class RegisterModel
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        public string Username { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.MinLength(6)]
+        public string Password { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Required]
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
+}

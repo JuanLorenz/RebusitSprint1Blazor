@@ -1,0 +1,55 @@
+@page "/"
+@inject NavigationManager Nav
+
+<PageTitle>Login</PageTitle>
+
+<div class="login-page">
+    <div class="login-left">
+        <div class="login-center">
+            <div class="brand">
+                <h1 class="logo">ROOTED</h1>
+                <p class="tagline">Personal Goal Reminder</p>
+            </div>
+
+            <div class="login-form-wrapper">
+                <h2 class="form-title">Login</h2>
+
+                <EditForm Model="loginModel" OnSubmit="HandleLogin" FormName="LoginForm">
+                    <div class="form-group">
+                        <InputText class="form-control" placeholder="Username" @bind-Value="loginModel.Username" />
+                    </div>
+
+                    <div class="form-group">
+                        <InputText type="password" class="form-control" placeholder="Password" @bind-Value="loginModel.Password" />
+                    </div>
+
+                    <button type="submit" class="btn-login">Login</button>
+                </EditForm>
+
+                <p class="switch-link">
+                    New Here? <a href="/register">Register</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-right">
+        <!-- Fern / leaf illustration goes here -->
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private LoginModel loginModel { get; set; } = new();
+
+    private void HandleLogin()
+    {
+        Nav.NavigateTo("/dashboard");
+    }
+
+    public class LoginModel
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}

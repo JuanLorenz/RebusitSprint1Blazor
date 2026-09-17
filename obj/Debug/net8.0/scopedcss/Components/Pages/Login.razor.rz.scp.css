@@ -1,0 +1,141 @@
+@font-face {
+    font-family: 'Yatra One';
+    src: url('/fonts/yatra-one.regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.login-page[b-8jzusy9o0u] {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.login-left[b-8jzusy9o0u] {
+    flex: 1;
+    display: flex;
+    box-sizing: border-box;
+}
+
+.login-center[b-8jzusy9o0u] {
+    background-color: #2e7d32;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.brand[b-8jzusy9o0u] {
+    margin-bottom: 60px;
+}
+
+.logo[b-8jzusy9o0u] {
+    font-family: 'Yatra One', cursive;
+    font-size: 2.8rem;
+    letter-spacing: 4px;
+    margin: 0;
+    font-weight: 400;
+}
+
+.tagline[b-8jzusy9o0u] {
+    margin-top: 4px;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.login-form-wrapper[b-8jzusy9o0u] {
+    max-width: 320px;
+}
+
+.form-title[b-8jzusy9o0u] {
+    font-family: 'Yatra One', cursive;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 24px;
+}
+
+.form-group[b-8jzusy9o0u] {
+    margin-bottom: 16px;
+}
+
+.form-control[b-8jzusy9o0u] {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 20px;
+    background-color: #e8f0e9;
+    color: #333;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.form-control[b-8jzusy9o0u]::placeholder {
+    color: #6b6b6b;
+}
+
+.form-control:focus[b-8jzusy9o0u] {
+    outline: none;
+    box-shadow: 0 0 0 2px #a5d6a7;
+}
+
+.error-text[b-8jzusy9o0u] {
+    color: #ffcdd2;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+}
+
+.btn-login[b-8jzusy9o0u] {
+    font-family: 'Yatra One', cursive;
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 20px;
+    background-color: #a5d6a7;
+    color: #1b3a1e;
+    font-weight: 400;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-login:hover[b-8jzusy9o0u] {
+    background-color: #94cc96;
+}
+
+.switch-link[b-8jzusy9o0u] {
+    margin-top: 16px;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.switch-link a[b-8jzusy9o0u] {
+    color: #d4f5d6;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.login-right[b-8jzusy9o0u] {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    background-color:#3e8b42 ;
+    background-image: url('images/Login - Img.png');
+}
+
+@media (max-width: 768px) {
+    .login-page[b-8jzusy9o0u] {
+        flex-direction: column;
+    }
+
+    .login-center[b-8jzusy9o0u] {
+        padding: 40px 30px;
+    }
+
+    .login-right[b-8jzusy9o0u] {
+        min-height: 250px;
+    }
+}
