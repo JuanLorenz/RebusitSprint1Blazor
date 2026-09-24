@@ -3,86 +3,125 @@
 
 <PageTitle>Register</PageTitle>
 
-<div class="login-page">
-    <div class="login-left">
-        <div class="login-center">
-            <div class="brand">
-                <h1 class="logo">ROOTED</h1>
-                <p class="tagline">Personal Goal Reminder</p>
-            </div>
+<div class="flex min-h-screen w-full flex-col md:flex-row">
+<div class="flex flex-1">
+    <div class="box-border flex flex-1 flex-col justify-center bg-[#2e7d32] px-[30px] py-10 text-white md:px-20 md:py-[60px]">
 
-            <div class="login-form-wrapper">
-                <h2 class="form-title">Register</h2>
+        <div class="mb-[60px]">
+            <h1 class="m-0 font-yatra text-[2.8rem] font-normal tracking-[4px]">
+                ROOTED
+            </h1>
 
-                <EditForm Model="registerModel" OnValidSubmit="HandleRegister" FormName="RegisterForm">
-                    <DataAnnotationsValidator />
-
-                    <div class="form-group">
-                        <InputText class="form-control" placeholder="Username" @bind-Value="registerModel.Username" />
-                    </div>
-
-                    <div class="form-group">
-                        <InputText class="form-control" placeholder="Email" @bind-Value="registerModel.Email" />
-                    </div>
-
-                    <div class="form-group">
-                        <InputText type="password" class="form-control" placeholder="Password" @bind-Value="registerModel.Password" />
-                    </div>
-
-                    <div class="form-group">
-                        <InputText type="password" class="form-control" placeholder="Confirm Password" @bind-Value="registerModel.ConfirmPassword" />
-                    </div>
-
-                    @if (!string.IsNullOrEmpty(errorMessage))
-                    {
-                        <p class="error-text">@errorMessage</p>
-                    }
-
-                    <button type="submit" class="btn-login">Register</button>
-                </EditForm>
-
-                <p class="switch-link">
-                    Already have an account? <a href="/">Login</a>
-                </p>
-            </div>
+            <p class="mt-1 text-[0.9rem] opacity-90">
+                Personal Goal Reminder
+            </p>
         </div>
-    </div>
 
-    <div class="login-right">
-        <!-- Fern / leaf illustration goes here -->
+        <div class="max-w-[320px]">
+            <h2 class="mb-6 font-yatra text-[2rem] font-normal">
+                Register
+            </h2>
+
+            <EditForm
+                Model="registerModel"
+                OnValidSubmit="HandleRegister"
+                FormName="RegisterForm">
+
+                <DataAnnotationsValidator />
+
+                <div class="mb-4">
+                    <InputText
+                        class="box-border w-full rounded-[20px] border-none bg-[#e8f0e9] px-4 py-3 text-[0.95rem] text-[#333] outline-none placeholder:text-[#6b6b6b] focus:ring-2 focus:ring-[#a5d6a7]"
+                        placeholder="Username"
+                        @bind-Value="registerModel.Username" />
+                </div>
+
+                <div class="mb-4">
+                    <InputText
+                        type="email"
+                        class="box-border w-full rounded-[20px] border-none bg-[#e8f0e9] px-4 py-3 text-[0.95rem] text-[#333] outline-none placeholder:text-[#6b6b6b] focus:ring-2 focus:ring-[#a5d6a7]"
+                        placeholder="Email"
+                        @bind-Value="registerModel.Email" />
+                </div>
+
+                <div class="mb-4">
+                    <InputText
+                        type="password"
+                        class="box-border w-full rounded-[20px] border-none bg-[#e8f0e9] px-4 py-3 text-[0.95rem] text-[#333] outline-none placeholder:text-[#6b6b6b] focus:ring-2 focus:ring-[#a5d6a7]"
+                        placeholder="Password"
+                        @bind-Value="registerModel.Password" />
+                </div>
+
+                <div class="mb-4">
+                    <InputText
+                        type="password"
+                        class="box-border w-full rounded-[20px] border-none bg-[#e8f0e9] px-4 py-3 text-[0.95rem] text-[#333] outline-none placeholder:text-[#6b6b6b] focus:ring-2 focus:ring-[#a5d6a7]"
+                        placeholder="Confirm Password"
+                        @bind-Value="registerModel.ConfirmPassword" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <p class="mb-3 text-[0.85rem] text-[#ffcdd2]">
+                        @errorMessage
+                    </p>
+                }
+
+                <button
+                    type="submit"
+                    class="mt-2 w-full cursor-pointer rounded-[20px] border-none bg-[#a5d6a7] px-3 py-3 font-yatra text-base font-normal text-[#1b3a1e] transition-colors duration-200 hover:bg-[#94cc96]">
+                    Register
+                </button>
+            </EditForm>
+
+            <p class="mt-4 text-center text-[0.85rem]">
+                Already have an account?
+                <a
+                    href="/"
+                    class="font-semibold text-[#d4f5d6] underline">
+                    Login
+                </a>
+            </p>
+        </div>
     </div>
 </div>
 
+<div
+    class="min-h-[250px] flex-1 bg-[#3e8b42] bg-cover bg-center bg-[url('/images/Register%20-%20Img.png')] md:min-h-0">
+</div>
+
+</div>
 @code {
-    private RegisterModel registerModel = new();
-    private string? errorMessage;
+private RegisterModel registerModel = new();
+private string? errorMessage;
 
-    private async Task HandleRegister()
+private async Task HandleRegister()
+{
+    if (registerModel.Password != registerModel.ConfirmPassword)
     {
-        if (registerModel.Password != registerModel.ConfirmPassword)
-        {
-            errorMessage = "Passwords do not match.";
-            return;
-        }
-
-        Nav.NavigateTo("/");
-        await Task.CompletedTask;
+        errorMessage = "Passwords do not match.";
+        return;
     }
 
-    public class RegisterModel
-    {
-        [System.ComponentModel.DataAnnotations.Required]
-        public string Username { get; set; } = string.Empty;
+    Nav.NavigateTo("/");
+    await Task.CompletedTask;
+}
 
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.EmailAddress]
-        public string Email { get; set; } = string.Empty;
+public class RegisterModel
+{
+    [System.ComponentModel.DataAnnotations.Required]
+    public string Username { get; set; } = string.Empty;
 
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.MinLength(6)]
-        public string Password { get; set; } = string.Empty;
+    [System.ComponentModel.DataAnnotations.Required]
+    [System.ComponentModel.DataAnnotations.EmailAddress]
+    public string Email { get; set; } = string.Empty;
 
-        [System.ComponentModel.DataAnnotations.Required]
-        public string ConfirmPassword { get; set; } = string.Empty;
-    }
+    [System.ComponentModel.DataAnnotations.Required]
+    [System.ComponentModel.DataAnnotations.MinLength(6)]
+    public string Password { get; set; } = string.Empty;
+
+    [System.ComponentModel.DataAnnotations.Required]
+    public string ConfirmPassword { get; set; } = string.Empty;
+}
+
 }

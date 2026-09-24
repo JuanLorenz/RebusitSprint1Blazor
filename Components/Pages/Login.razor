@@ -3,53 +3,82 @@
 
 <PageTitle>Login</PageTitle>
 
-<div class="login-page">
-    <div class="login-left">
-        <div class="login-center">
-            <div class="brand">
-                <h1 class="logo">ROOTED</h1>
-                <p class="tagline">Personal Goal Reminder</p>
-            </div>
+<div class="flex min-h-screen w-full flex-col md:flex-row">
+<div class="flex flex-1">
+    <div class="box-border flex flex-1 flex-col justify-center bg-[#2e7d32] px-[30px] py-10 text-white md:px-20 md:py-[60px]">
 
-            <div class="login-form-wrapper">
-                <h2 class="form-title">Login</h2>
+        <div class="mb-[60px]">
+            <h1 class="m-0 font-yatra text-[2.8rem] font-normal tracking-[4px]">
+                ROOTED
+            </h1>
 
-                <EditForm Model="loginModel" OnSubmit="HandleLogin" FormName="LoginForm">
-                    <div class="form-group">
-                        <InputText class="form-control" placeholder="Username" @bind-Value="loginModel.Username" />
-                    </div>
-
-                    <div class="form-group">
-                        <InputText type="password" class="form-control" placeholder="Password" @bind-Value="loginModel.Password" />
-                    </div>
-
-                    <button type="submit" class="btn-login">Login</button>
-                </EditForm>
-
-                <p class="switch-link">
-                    New Here? <a href="/register">Register</a>
-                </p>
-            </div>
+            <p class="mt-1 text-[0.9rem] opacity-90">
+                Personal Goal Reminder
+            </p>
         </div>
-    </div>
 
-    <div class="login-right">
-        <!-- Fern / leaf illustration goes here -->
+        <div class="max-w-[320px]">
+            <h2 class="mb-6 font-yatra text-[2rem] font-normal">
+                Login
+            </h2>
+
+            <EditForm
+                Model="loginModel"
+                OnSubmit="HandleLogin"
+                FormName="LoginForm">
+
+                <div class="mb-4">
+                    <InputText
+                        class="box-border w-full rounded-[20px] border-none bg-[#e8f0e9] px-4 py-3 text-[0.95rem] text-[#333] outline-none placeholder:text-[#6b6b6b] focus:ring-2 focus:ring-[#a5d6a7]"
+                        placeholder="Username"
+                        @bind-Value="loginModel.Username" />
+                </div>
+
+                <div class="mb-4">
+                    <InputText
+                        type="password"
+                        class="box-border w-full rounded-[20px] border-none bg-[#e8f0e9] px-4 py-3 text-[0.95rem] text-[#333] outline-none placeholder:text-[#6b6b6b] focus:ring-2 focus:ring-[#a5d6a7]"
+                        placeholder="Password"
+                        @bind-Value="loginModel.Password" />
+                </div>
+
+                <button
+                    type="submit"
+                    class="mt-2 w-full cursor-pointer rounded-[20px] border-none bg-[#a5d6a7] px-3 py-3 font-yatra text-base font-normal text-[#1b3a1e] transition-colors duration-200 hover:bg-[#94cc96]">
+                    Login
+                </button>
+            </EditForm>
+
+            <p class="mt-4 text-center text-[0.85rem]">
+                New Here?
+                <a
+                    href="/register"
+                    class="font-semibold text-[#d4f5d6] underline">
+                    Register
+                </a>
+            </p>
+        </div>
     </div>
 </div>
 
+<div
+    class="min-h-[250px] flex-1 bg-[#3e8b42] bg-cover bg-center bg-[url('/images/Login%20-%20Img.png')] md:min-h-0">
+</div>
+
+</div>
 @code {
-    [SupplyParameterFromForm]
-    private LoginModel loginModel { get; set; } = new();
+[SupplyParameterFromForm]
+private LoginModel loginModel { get; set; } = new();
 
-    private void HandleLogin()
-    {
-        Nav.NavigateTo("/dashboard");
-    }
+private void HandleLogin()
+{
+    Nav.NavigateTo("/dashboard");
+}
 
-    public class LoginModel
-    {
-        public string Username { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-    }
+public class LoginModel
+{
+    public string Username { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+}
+
 }

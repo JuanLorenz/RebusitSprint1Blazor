@@ -19,12 +19,11 @@ C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\staticw
 C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.MyBlazorApp.props
 C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\staticwebassets.pack.json
 C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\scopedcss\bundle\MyBlazorApp.styles.css
-C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\scopedcss\projectbundle\MyBlazorApp.bundle.scp.css
 C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\MyBlazorApp.dll
 C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\refint\MyBlazorApp.dll
 C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\MyBlazorApp.pdb
 C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\MyBlazorApp.genruntimeconfig.cache
 C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\ref\MyBlazorApp.dll
-C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\scopedcss\Components\Pages\Login.razor.rz.scp.css
-C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\scopedcss\Components\Pages\Register.razor.rz.scp.css
-C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\scopedcss\Components\Pages\Dashboard.razor.rz.scp.css
+C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\bin\Debug\net8.0\package-lock.json
+C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\bin\Debug\net8.0\package.json
+C:\Users\L23Y16W34\Downloads\Rebusit-Sprint\MyBlazorApp\obj\Debug\net8.0\MyBlazorApp.sourcelink.json
