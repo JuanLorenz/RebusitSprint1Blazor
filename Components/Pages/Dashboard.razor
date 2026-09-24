@@ -14,67 +14,120 @@
 
         <div class="flex items-center gap-4 justify-self-end">
             <button class="@IconBtn" @onclick="GoToProfile" title="Profile">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="white">
-                    <circle cx="12" cy="8" r="4" />
-                    <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" />
-                </svg>
+                <img src="/images/ProfileIcon.png" alt="Profile" class="h-[28px] w-[28px]" />
             </button>
 
             <button class="@IconBtn" @onclick="GoToSettings" title="Settings">
-                <svg viewBox="0 0 24 24" width="22" height="22">
-                    <g fill="white">
-                        <rect x="11" y="1" width="2" height="4" rx="1" />
-                        <rect x="11" y="19" width="2" height="4" rx="1" />
-                        <rect x="1" y="11" width="4" height="2" rx="1" />
-                        <rect x="19" y="11" width="4" height="2" rx="1" />
-                        <rect x="4.2" y="4.2" width="2" height="4" rx="1" transform="rotate(45 5.2 6.2)" />
-                        <rect x="17.8" y="4.2" width="2" height="4" rx="1" transform="rotate(-45 18.8 6.2)" />
-                        <rect x="4.2" y="15.8" width="2" height="4" rx="1" transform="rotate(-45 5.2 17.8)" />
-                        <rect x="17.8" y="15.8" width="2" height="4" rx="1" transform="rotate(45 18.8 17.8)" />
-                        <circle cx="12" cy="12" r="6" />
-                    </g>
-                    <circle cx="12" cy="12" r="2.5" fill="#7ea97e" />
-                </svg>
+                <img src="/images/SettingsIcon.png" alt="Settings" class="h-[28px] w-[28px]" />
             </button>
 
             <button class="@IconBtn" @onclick="Logout" title="Log out">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" y1="12" x2="9" y2="12" />
-                </svg>
+                <img src="/images/LogoutIcon.png" alt="Logout" class="h-[28px] w-[28px]" />
             </button>
         </div>
     </header>
 
     <main class="flex flex-wrap gap-6 p-5 sm:p-8">
-        <div class="flex h-[150px] w-[130px] cursor-pointer flex-col items-center justify-center gap-2.5 rounded-2xl bg-rooted-card shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_4px_8px_rgba(0,0,0,0.12)]"
-             @onclick="PlantNewGoal">
-            <span class="text-center text-[0.85rem] font-bold text-rooted-ink">Plant a New</span>
+        <!-- Render existing goals to the left -->
+        @foreach (var goal in goals)
+        {
+            <div class="flex h-[180px] w-[160px] flex-col items-center justify-center rounded-2xl bg-white p-4 shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_4px_8px_rgba(0,0,0,0.12)]">
+                <span class="text-center text-[0.95rem] font-bold text-black break-words line-clamp-5">
+                    @goal
+                </span>
+            </div>
+        }
 
-            <span class="flex size-11 items-center justify-center rounded-full bg-white">
-                <svg viewBox="0 0 40 40" width="28" height="28">
-                    <g fill="#ef7d6b">
-                        <circle cx="20" cy="10" r="8" />
-                        <circle cx="20" cy="30" r="8" />
-                        <circle cx="10" cy="20" r="8" />
-                        <circle cx="30" cy="20" r="8" />
-                    </g>
-                    <circle cx="20" cy="20" r="6" fill="#f4c542" />
-                </svg>
+        <!-- Plant a New Goal Button -->
+        <div class="flex h-[180px] w-[160px] cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl bg-rooted-card p-4 shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_4px_8px_rgba(0,0,0,0.12)]"
+             @onclick="OpenModal">
+            <span class="text-center text-[0.95rem] font-bold text-rooted-ink">Plant a New</span>
+
+            <span class="flex size-12 items-center justify-center rounded-full bg-white shadow-sm">
+                <img src="/images/Flower%20Icon.png" alt="Plant Goal" class="h-[30px] w-[30px]" />
             </span>
 
-            <span class="text-center text-[0.85rem] font-bold text-rooted-ink">Goal</span>
+            <span class="text-center text-[0.95rem] font-bold text-rooted-ink">Goal</span>
         </div>
     </main>
+
+    <!-- Modal Popup Overlay -->
+    @if (isModalOpen)
+    {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+             @onclick="CloseModal">
+            <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl" @onclick:stopPropagation>
+                <div class="flex items-center justify-between border-b pb-3">
+                    <h2 class="text-lg font-bold text-rooted-ink">Plant a New Goal</h2>
+                    <button class="text-gray-400 hover:text-gray-600" @onclick="CloseModal">&times;</button>
+                </div>
+
+                <div class="mt-4">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">
+                        Your Goal
+                    </label>
+                    <input type="text"
+                           class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-rooted-header focus:outline-none focus:ring-1 focus:ring-rooted-header"
+                           placeholder="e.g., Read 15 minutes daily"
+                           maxlength="100"
+                           @bind="newGoalText"
+                           @bind:event="oninput"
+                           @onkeyup="HandleKeyUp"
+                           autofocus />
+                </div>
+
+                <div class="mt-6 flex justify-end gap-2">
+                    <button class="rounded-lg px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100"
+                            @onclick="CloseModal">
+                        Cancel
+                    </button>
+                    <button class="rounded-lg bg-rooted-header px-4 py-2 text-sm font-semibold text-white shadow transition-opacity hover:opacity-90 disabled:opacity-50"
+                            disabled="@string.IsNullOrWhiteSpace(newGoalText)"
+                            @onclick="SaveGoal">
+                        Plant Goal
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
     private const string IconBtn =
         "flex cursor-pointer items-center justify-center rounded-lg p-1.5 transition-colors duration-200 hover:bg-white/15";
 
+    private bool isModalOpen = false;
+    private string newGoalText = string.Empty;
+    private List<string> goals = new();
+
     private void GoToProfile() => Nav.NavigateTo("/profile");
     private void GoToSettings() => Nav.NavigateTo("/settings");
     private void Logout() => Nav.NavigateTo("/");
-    private void PlantNewGoal() => Nav.NavigateTo("/goals/new");
+
+    private void OpenModal()
+    {
+        newGoalText = string.Empty;
+        isModalOpen = true;
+    }
+
+    private void CloseModal()
+    {
+        isModalOpen = false;
+    }
+
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(newGoalText))
+        {
+            SaveGoal();
+        }
+    }
+
+    private void SaveGoal()
+    {
+        if (string.IsNullOrWhiteSpace(newGoalText)) return;
+
+        goals.Add(newGoalText.Trim());
+        isModalOpen = false;
+    }
 }
