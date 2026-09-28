@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\L23Y16W34\\Downloads\\Rebusit-Sprint\\MyBlazorApp\\MyBlazorApp.csproj": {}
+    "C:\\Users\\John Lawrence\\Downloads\\SirTaboadaApp\\RebusitSprint1Blazor\\MyBlazorApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\L23Y16W34\\Downloads\\Rebusit-Sprint\\MyBlazorApp\\MyBlazorApp.csproj": {
+    "C:\\Users\\John Lawrence\\Downloads\\SirTaboadaApp\\RebusitSprint1Blazor\\MyBlazorApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\L23Y16W34\\Downloads\\Rebusit-Sprint\\MyBlazorApp\\MyBlazorApp.csproj",
+        "projectUniqueName": "C:\\Users\\John Lawrence\\Downloads\\SirTaboadaApp\\RebusitSprint1Blazor\\MyBlazorApp.csproj",
         "projectName": "MyBlazorApp",
-        "projectPath": "C:\\Users\\L23Y16W34\\Downloads\\Rebusit-Sprint\\MyBlazorApp\\MyBlazorApp.csproj",
-        "packagesPath": "C:\\Users\\L23Y16W34\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\L23Y16W34\\Downloads\\Rebusit-Sprint\\MyBlazorApp\\obj\\",
+        "projectPath": "C:\\Users\\John Lawrence\\Downloads\\SirTaboadaApp\\RebusitSprint1Blazor\\MyBlazorApp.csproj",
+        "packagesPath": "C:\\Users\\John Lawrence\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\John Lawrence\\Downloads\\SirTaboadaApp\\RebusitSprint1Blazor\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\L23Y16W34\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\John Lawrence\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,11 +26,11 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
+            "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {}
           }
@@ -44,11 +44,29 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net8.0": {
+          "framework": "net8.0",
           "targetAlias": "net8.0",
+          "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.20, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[8.0.20, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -68,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

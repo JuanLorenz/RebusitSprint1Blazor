@@ -1,133 +1,751 @@
 @page "/dashboard"
 @rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.EntityFrameworkCore
+@using MyBlazorApp.Data
+
 @inject NavigationManager Nav
+@inject UserSession Session
+@inject AppDbContext Db
 
 <PageTitle>Dashboard</PageTitle>
 
 <div class="min-h-screen w-full bg-rooted-page">
-    <header class="grid h-20 grid-cols-[1fr_auto_1fr] items-center bg-rooted-header px-4 sm:px-8">
-        <div></div>
 
+    <!-- HEADER -->
+    <header class="grid h-20 grid-cols-[1fr_auto_1fr] items-center bg-rooted-header px-4 sm:px-8">
+
+        <!-- LEFT -->
+        <div class="flex items-center">
+            @if (Session.CurrentUser != null)
+            {
+                <span class="font-yatra text-[1rem] text-white sm:text-[1.2rem]">
+                    Hello @Session.CurrentUser.Username!
+                </span>
+            }
+        </div>
+
+        <!-- CENTER -->
         <h1 class="justify-self-center font-yatra text-[1.6rem] tracking-[3px] text-white sm:text-[2.2rem]">
             ROOTED
         </h1>
 
+        <!-- RIGHT -->
         <div class="flex items-center gap-4 justify-self-end">
-            <button class="@IconBtn" @onclick="GoToProfile" title="Profile">
-                <img src="/images/ProfileIcon.png" alt="Profile" class="h-[28px] w-[28px]" />
+
+            <button type="button"
+                    class="@IconBtn"
+                    @onclick="GoToProfile"
+                    title="Profile">
+                <img src="/images/ProfileIcon.png"
+                     alt="Profile"
+                     class="h-[28px] w-[28px]" />
             </button>
 
-            <button class="@IconBtn" @onclick="GoToSettings" title="Settings">
-                <img src="/images/SettingsIcon.png" alt="Settings" class="h-[28px] w-[28px]" />
+            <button type="button"
+                    class="@IconBtn"
+                    @onclick="GoToSettings"
+                    title="Settings">
+                <img src="/images/SettingsIcon.png"
+                     alt="Settings"
+                     class="h-[28px] w-[28px]" />
             </button>
 
-            <button class="@IconBtn" @onclick="Logout" title="Log out">
-                <img src="/images/LogoutIcon.png" alt="Logout" class="h-[28px] w-[28px]" />
+            <button type="button"
+                    class="@IconBtn"
+                    @onclick="Logout"
+                    title="Logout">
+                <img src="/images/LogoutIcon.png"
+                     alt="Logout"
+                     class="h-[28px] w-[28px]" />
             </button>
+
         </div>
     </header>
 
+
+    <!-- GOALS -->
     <main class="flex flex-wrap gap-6 p-5 sm:p-8">
-        <!-- Render existing goals to the left -->
+
         @foreach (var goal in goals)
         {
-            <div class="flex h-[180px] w-[160px] flex-col items-center justify-center rounded-2xl bg-white p-4 shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_4px_8px_rgba(0,0,0,0.12)]">
+            <!-- EXISTING GOAL -->
+            <div class="flex h-[180px] w-[160px] cursor-pointer flex-col items-center justify-center rounded-2xl bg-white p-4 shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_4px_8px_rgba(0,0,0,0.12)]"
+                 @onclick="() => OpenGoal(goal)">
+
                 <span class="text-center text-[0.95rem] font-bold text-black break-words line-clamp-5">
-                    @goal
+                    @goal.Title
                 </span>
+
             </div>
         }
 
-        <!-- Plant a New Goal Button -->
+
+        <!-- PLANT A NEW GOAL -->
         <div class="flex h-[180px] w-[160px] cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl bg-rooted-card p-4 shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_4px_8px_rgba(0,0,0,0.12)]"
              @onclick="OpenModal">
-            <span class="text-center text-[0.95rem] font-bold text-rooted-ink">Plant a New</span>
 
-            <span class="flex size-12 items-center justify-center rounded-full bg-white shadow-sm">
-                <img src="/images/Flower%20Icon.png" alt="Plant Goal" class="h-[30px] w-[30px]" />
+            <span class="text-center text-[0.95rem] font-bold text-rooted-ink">
+                Plant a New
             </span>
 
-            <span class="text-center text-[0.95rem] font-bold text-rooted-ink">Goal</span>
+            <span class="flex size-12 items-center justify-center rounded-full bg-white shadow-sm">
+                <img src="/images/Flower%20Icon.png"
+                     alt="Plant Goal"
+                     class="h-[30px] w-[30px]" />
+            </span>
+
+            <span class="text-center text-[0.95rem] font-bold text-rooted-ink">
+                Goal
+            </span>
+
         </div>
+
     </main>
 
-    <!-- Modal Popup Overlay -->
+
+    <!-- BOTTOM LEFT BUTTONS -->
+    <div style="position: fixed; left: 24px; bottom: 24px; z-index: 900;"
+         class="flex flex-row gap-3">
+
+        <button type="button"
+                class="rounded-xl bg-white px-5 py-3 font-semibold text-rooted-ink shadow-lg transition-transform duration-200 hover:scale-105"
+                @onclick="OpenCommentsModal">
+            Comments
+        </button>
+
+        <button type="button"
+                class="rounded-xl bg-white px-5 py-3 font-semibold text-rooted-ink shadow-lg transition-transform duration-200 hover:scale-105"
+                @onclick="OpenRatingsModal">
+            Ratings
+        </button>
+
+    </div>
+
+
+    <!-- CREATE GOAL MODAL -->
     @if (isModalOpen)
     {
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+        <div class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
              @onclick="CloseModal">
-            <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl" @onclick:stopPropagation>
-                <div class="flex items-center justify-between border-b pb-3">
-                    <h2 class="text-lg font-bold text-rooted-ink">Plant a New Goal</h2>
-                    <button class="text-gray-400 hover:text-gray-600" @onclick="CloseModal">&times;</button>
+
+            <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+                 @onclick:stopPropagation="true">
+
+                <div class="mb-5 flex items-center justify-between border-b pb-3">
+
+                    <h2 class="text-xl font-bold text-rooted-ink">
+                        Plant a New Goal
+                    </h2>
+
+                    <button type="button"
+                            class="text-2xl text-gray-500 hover:text-gray-800"
+                            @onclick="CloseModal">
+                        &times;
+                    </button>
+
                 </div>
 
-                <div class="mt-4">
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">
-                        Your Goal
-                    </label>
-                    <input type="text"
-                           class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-rooted-header focus:outline-none focus:ring-1 focus:ring-rooted-header"
-                           placeholder="e.g., Read 15 minutes daily"
-                           maxlength="100"
-                           @bind="newGoalText"
-                           @bind:event="oninput"
-                           @onkeyup="HandleKeyUp"
-                           autofocus />
-                </div>
+                <label class="mb-2 block text-sm font-semibold text-gray-700">
+                    Goal
+                </label>
 
-                <div class="mt-6 flex justify-end gap-2">
-                    <button class="rounded-lg px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100"
+                <input type="text"
+                       class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-rooted-green focus:ring-2 focus:ring-rooted-green/20"
+                       placeholder="Enter your goal..."
+                       maxlength="100"
+                       @bind="newGoalText"
+                       @bind:event="oninput"
+                       @onkeyup="HandleKeyUp"
+                       autofocus />
+
+                <div class="mt-5 flex justify-end gap-3">
+
+                    <button type="button"
+                            class="rounded-xl px-5 py-3 font-semibold text-gray-600 hover:bg-gray-100"
                             @onclick="CloseModal">
                         Cancel
                     </button>
-                    <button class="rounded-lg bg-rooted-header px-4 py-2 text-sm font-semibold text-white shadow transition-opacity hover:opacity-90 disabled:opacity-50"
-                            disabled="@string.IsNullOrWhiteSpace(newGoalText)"
-                            @onclick="SaveGoal">
+
+                    <button type="button"
+                            class="rounded-xl bg-rooted-green px-5 py-3 font-semibold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                            @onclick="SaveGoal"
+                            disabled="@string.IsNullOrWhiteSpace(newGoalText)">
                         Plant Goal
                     </button>
+
                 </div>
+
             </div>
         </div>
     }
+
+
+    <!-- GOAL DETAILS MODAL -->
+    @if (selectedGoal != null)
+    {
+        <div class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+             @onclick="CloseGoal">
+
+            <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
+                 @onclick:stopPropagation="true">
+
+                <div class="flex items-center justify-between border-b pb-3">
+
+                    <h2 class="text-xl font-bold text-rooted-ink">
+                        Goal
+                    </h2>
+
+                    <button type="button"
+                            class="text-2xl text-gray-500 hover:text-gray-800"
+                            @onclick="CloseGoal">
+                        &times;
+                    </button>
+
+                </div>
+
+                <div class="mt-6 rounded-xl bg-gray-100 p-5">
+
+                    <p class="text-lg font-semibold text-rooted-ink">
+                        @selectedGoal.Title
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+    }
+
+
+    <!-- COMMENTS MODAL -->
+    @if (isCommentsModalOpen)
+    {
+        <div class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+             @onclick="CloseCommentsModal">
+
+            <div class="flex h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-xl"
+                 @onclick:stopPropagation="true">
+
+                <!-- HEADER -->
+                <div class="flex shrink-0 items-center justify-between border-b px-5 py-4">
+
+                    <div>
+                        <h2 class="text-lg font-bold text-rooted-ink">
+                            Comments
+                        </h2>
+
+                        <p class="text-xs text-gray-400">
+                            Comments about the app
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="text-2xl text-gray-500 hover:text-gray-800"
+                            @onclick="CloseCommentsModal">
+                        &times;
+                    </button>
+
+                </div>
+
+
+                <!-- COMMENTS LIST -->
+                <div class="min-h-0 flex-1 overflow-y-auto p-5">
+
+                    @if (comments.Any())
+                    {
+                        <div class="space-y-3">
+
+                            @foreach (var comment in comments)
+                            {
+                                <div class="rounded-xl bg-gray-100 p-3">
+
+                                    <div class="flex items-center justify-between gap-3">
+
+                                        <strong class="text-sm text-rooted-ink">
+                                            @(comment.User?.Username ?? "Unknown User")
+                                        </strong>
+
+                                        <span class="text-xs text-gray-400">
+                                            @comment.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                        </span>
+
+                                    </div>
+
+                                    <p class="mt-2 text-sm text-gray-700">
+                                        @comment.Text
+                                    </p>
+
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="flex h-full items-center justify-center">
+
+                            <p class="text-center text-sm text-gray-400">
+                                No comments yet.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+
+                <!-- ADD COMMENT -->
+                <div class="shrink-0 border-t p-5">
+
+                    <input type="text"
+                           class="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-rooted-green focus:ring-2 focus:ring-rooted-green/20"
+                           placeholder="Write a comment..."
+                           @bind="newCommentText"
+                           @bind:event="oninput"
+                           @onkeyup="HandleCommentKeyUp" />
+
+                    <button type="button"
+                            class="mt-3 w-full rounded-xl bg-rooted-green px-4 py-3 font-semibold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                            @onclick="AddComment"
+                            disabled="@string.IsNullOrWhiteSpace(newCommentText)">
+                        Post Comment
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    }
+
+
+    <!-- RATINGS MODAL -->
+    @if (isRatingsModalOpen)
+    {
+        <div class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+             @onclick="CloseRatingsModal">
+
+            <div class="flex h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-xl"
+                 @onclick:stopPropagation="true">
+
+                <!-- HEADER -->
+                <div class="flex shrink-0 items-center justify-between border-b px-5 py-4">
+
+                    <div>
+                        <h2 class="text-lg font-bold text-rooted-ink">
+                            Ratings
+                        </h2>
+
+                        <p class="text-xs text-gray-400">
+                            Ratings for the app
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="text-2xl text-gray-500 hover:text-gray-800"
+                            @onclick="CloseRatingsModal">
+                        &times;
+                    </button>
+
+                </div>
+
+
+                <!-- AVERAGE -->
+                <div class="shrink-0 border-b px-5 py-4 text-center">
+
+                    @if (ratings.Any())
+                    {
+                        <p class="text-sm text-gray-500">
+                            Average Rating
+                        </p>
+
+                        <p class="mt-1 text-2xl font-bold text-rooted-ink">
+                            @ratings.Average(r => r.Value).ToString("0.0") / 5
+                        </p>
+
+                        <p class="text-xs text-gray-400">
+                            (@ratings.Count ratings)
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="text-sm text-gray-400">
+                            No ratings yet.
+                        </p>
+                    }
+
+                </div>
+
+
+                <!-- RATE APP -->
+                <div class="shrink-0 border-b px-5 py-4 text-center">
+
+                    <h3 class="text-sm font-semibold text-gray-700">
+                        Rate the app
+                    </h3>
+
+                    <div class="mt-3 flex justify-center gap-2">
+
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            int ratingValue = i;
+
+                            <button type="button"
+                                    class="text-3xl transition-transform hover:scale-110"
+                                    @onclick="() => RateApp(ratingValue)"
+                                    title="@($"{ratingValue} stars")">
+                                @(i <= CurrentRating ? "⭐" : "☆")
+                            </button>
+                        }
+
+                    </div>
+
+                    @if (CurrentRating > 0)
+                    {
+                        <p class="mt-2 text-xs text-gray-400">
+                            Your rating: @CurrentRating / 5
+                        </p>
+                    }
+
+                </div>
+
+
+                <!-- RATINGS LIST -->
+                <div class="min-h-0 flex-1 overflow-y-auto p-5">
+
+                    @if (ratings.Any())
+                    {
+                        <div class="space-y-3">
+
+                            @foreach (var rating in ratings)
+                            {
+                                <div class="flex items-center justify-between rounded-xl bg-gray-100 p-3">
+
+                                    <div>
+
+                                        <strong class="text-sm text-rooted-ink">
+                                            @(rating.User?.Username ?? "Unknown User")
+                                        </strong>
+
+                                        <p class="text-xs text-gray-400">
+                                            @rating.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                                        </p>
+
+                                    </div>
+
+                                    <span class="text-lg">
+
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            @(i <= rating.Value ? "⭐" : "☆")
+                                        }
+
+                                    </span>
+
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="flex h-full items-center justify-center">
+
+                            <p class="text-center text-sm text-gray-400">
+                                No ratings yet.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    }
+
 </div>
 
+
 @code {
+
     private const string IconBtn =
         "flex cursor-pointer items-center justify-center rounded-lg p-1.5 transition-colors duration-200 hover:bg-white/15";
 
-    private bool isModalOpen = false;
-    private string newGoalText = string.Empty;
-    private List<string> goals = new();
 
-    private void GoToProfile() => Nav.NavigateTo("/profile");
-    private void GoToSettings() => Nav.NavigateTo("/settings");
-    private void Logout() => Nav.NavigateTo("/");
+    private bool isModalOpen = false;
+    private bool isCommentsModalOpen = false;
+    private bool isRatingsModalOpen = false;
+
+
+    private string newGoalText = string.Empty;
+    private string newCommentText = string.Empty;
+
+
+    private List<Goal> goals = new();
+    private List<Comment> comments = new();
+    private List<Rating> ratings = new();
+
+
+    private Goal? selectedGoal;
+
+
+    private int CurrentRating = 0;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        if (!Session.IsLoggedIn)
+        {
+            Nav.NavigateTo("/");
+            return;
+        }
+
+        await LoadGoals();
+
+        StateHasChanged();
+    }
+
+
+    private async Task LoadGoals()
+    {
+        goals = await Db.Goals
+            .OrderByDescending(g => g.Id)
+            .ToListAsync();
+    }
+
+
+    private async Task LoadComments()
+    {
+        comments = await Db.Comments
+            .Include(c => c.User)
+            .OrderByDescending(c => c.CreatedAt)
+            .ToListAsync();
+    }
+
+
+    private async Task LoadRatings()
+    {
+        ratings = await Db.Ratings
+            .Include(r => r.User)
+            .OrderByDescending(r => r.CreatedAt)
+            .ToListAsync();
+    }
+
 
     private void OpenModal()
     {
+        isCommentsModalOpen = false;
+        isRatingsModalOpen = false;
+        selectedGoal = null;
+
         newGoalText = string.Empty;
+
         isModalOpen = true;
     }
+
 
     private void CloseModal()
     {
         isModalOpen = false;
+        newGoalText = string.Empty;
     }
 
-    private void HandleKeyUp(KeyboardEventArgs e)
+
+    private void OpenGoal(Goal goal)
     {
-        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(newGoalText))
+        isModalOpen = false;
+        isCommentsModalOpen = false;
+        isRatingsModalOpen = false;
+
+        selectedGoal = goal;
+    }
+
+
+    private void CloseGoal()
+    {
+        selectedGoal = null;
+    }
+
+
+    private async Task SaveGoal()
+    {
+        if (string.IsNullOrWhiteSpace(newGoalText))
+            return;
+
+        if (Session.CurrentUser == null)
+            return;
+
+
+        var goal = new Goal
         {
-            SaveGoal();
+            Title = newGoalText.Trim(),
+            UserId = Session.CurrentUser.Id
+        };
+
+
+        Db.Goals.Add(goal);
+
+        await Db.SaveChangesAsync();
+
+
+        goals.Insert(0, goal);
+
+        CloseModal();
+    }
+
+
+    private async Task OpenCommentsModal()
+    {
+        isModalOpen = false;
+        selectedGoal = null;
+        isRatingsModalOpen = false;
+
+        await LoadComments();
+
+        isCommentsModalOpen = true;
+    }
+
+
+    private void CloseCommentsModal()
+    {
+        isCommentsModalOpen = false;
+        newCommentText = string.Empty;
+    }
+
+
+    private async Task AddComment()
+    {
+        if (Session.CurrentUser == null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(newCommentText))
+            return;
+
+
+        var comment = new Comment
+        {
+            Text = newCommentText.Trim(),
+            UserId = Session.CurrentUser.Id,
+            CreatedAt = DateTime.Now
+        };
+
+
+        Db.Comments.Add(comment);
+
+        await Db.SaveChangesAsync();
+
+
+        comment.User = Session.CurrentUser;
+
+        comments.Insert(0, comment);
+
+        newCommentText = string.Empty;
+    }
+
+
+    private async Task HandleCommentKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await AddComment();
         }
     }
 
-    private void SaveGoal()
-    {
-        if (string.IsNullOrWhiteSpace(newGoalText)) return;
 
-        goals.Add(newGoalText.Trim());
+    private async Task OpenRatingsModal()
+    {
         isModalOpen = false;
+        selectedGoal = null;
+        isCommentsModalOpen = false;
+
+        await LoadRatings();
+
+
+        CurrentRating = Session.CurrentUser == null
+            ? 0
+            : ratings.FirstOrDefault(
+                r => r.UserId == Session.CurrentUser.Id
+              )?.Value ?? 0;
+
+
+        isRatingsModalOpen = true;
     }
+
+
+    private void CloseRatingsModal()
+    {
+        isRatingsModalOpen = false;
+    }
+
+
+    private async Task RateApp(int value)
+    {
+        if (Session.CurrentUser == null)
+            return;
+
+
+        var existingRating = await Db.Ratings
+            .FirstOrDefaultAsync(
+                r => r.UserId == Session.CurrentUser.Id
+            );
+
+
+        if (existingRating == null)
+        {
+            existingRating = new Rating
+            {
+                Value = value,
+                UserId = Session.CurrentUser.Id,
+                CreatedAt = DateTime.Now
+            };
+
+            Db.Ratings.Add(existingRating);
+        }
+        else
+        {
+            existingRating.Value = value;
+            existingRating.CreatedAt = DateTime.Now;
+        }
+
+
+        await Db.SaveChangesAsync();
+
+
+        CurrentRating = value;
+
+        await LoadRatings();
+    }
+
+
+    private void GoToProfile()
+    {
+        Nav.NavigateTo("/profile");
+    }
+
+
+    private void GoToSettings()
+    {
+        Nav.NavigateTo("/settings");
+    }
+
+
+    private void Logout()
+    {
+        Session.Logout();
+        Nav.NavigateTo("/");
+    }
+
+
+    private async Task HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SaveGoal();
+        }
+    }
+
 }
